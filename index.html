@@ -1,15 +1,15 @@
 <body>
 
     <pre>
-        <div id="board">
+        
+        <div id="board" style="font-size: xx-large;">
         </div>
     </pre>
+    <script src="eval.js"></script>
     <script src="data.js"></script>
     <script src="display.js"></script>
-    <script>
-        const board = createBoard(data);
-        document.getElementById('board').innerHTML = board;
-
-    </script>
     <script src="interaction.js"></script>
-</body>
+    <script>
+        window.onload = () => displayBoard(data, game);
+    </script>
+    </body>
