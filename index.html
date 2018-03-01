@@ -1,20 +1,31 @@
+<head>
+    <style>
+        
+    </style>
+</head>
 <body>
+    <span style="float: left;">
+        <pre>
+            <div id="board" style="font-size: xx-large; clear: both;">
+            </div>
+        </pre>
+    </span>
+    <div style="float: left;">
+        <pre>
+            Evaluation: <span id="eval"></span>
+            Phase: <span id="phase"></span>
+            <span id="player"></span>'s turn
+            B can set: <span id="bsettable"></span>
+            B has lost: <span id="blost"></span>
+            W can set: <span id="wsettable"></span>
+            W has lost: <span id="wlost"></span>
+        </pre>
+    </div>
+    <span style="clear: both;"></span>
 
-    <pre>
-        <div id="board" style="font-size: xx-large;">
-        </div>
-        <div>Evaluation: <span id="eval"></span></div>
-        <div>Phase: <span id="phase"></span></div>
-        <div><span id="player"></span>'s turn</div>
-        <div>B can set: <span id="bsettable"></span></div>
-        <div>B has lost: <span id="blost"></span></div>
-        <div>W can set:<span id="wsettable"></span></div>
-        <div>W has lost: <span id="wlost"></span></div>
-    </pre>
     <script src="eval.js"></script>
     <script src="data.js"></script>
     <script src="display.js"></script>
-    <script src="interaction.js"></script>
     <script>
         window.onload = () => displayBoard(data, game);
     </script>

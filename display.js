@@ -46,7 +46,7 @@ function handleClick(id, data, game) {
             displayBoard(data, game);
         }
     } else {
-
+        
     }
 }
 
