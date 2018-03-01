@@ -3,7 +3,7 @@ fields.forEach(field => field.addEventListener('click', e => {
     const fieldd = getFieldForId(e.target.id);
     if (isSetAllowed(fieldd)) {
         fieldd.state = game.player;
-        createBoard(data);
+        document.getElementById('board').innerHTML =  createBoard(data);
     }
 }));
 
