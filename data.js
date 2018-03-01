@@ -148,7 +148,6 @@ const data = [{
 }
 ];
 
-
 const game = {
     player: 'W',
     phase: 'set'

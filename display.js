@@ -35,6 +35,9 @@ function setField(id, data, game) {
 function displayBoard(data, game) {
     const board = createBoard(data);
     document.getElementById('board').innerHTML = board;
+    document.getElementById('eval').innerHTML = evaluate(data, game);
+    document.getElementById('phase').innerHTML = game.phase;
+    
     const fields = document.querySelectorAll('span.field');
     fields.forEach(field => field.addEventListener('click', e => {
         setField(e.target.id, data, game);
