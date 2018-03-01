@@ -35,4 +35,3 @@ function setState(id, state) {
     const newState = arr.join('');
     compressedState = newState;
 }
-
