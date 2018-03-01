@@ -1,0 +1,44 @@
+<body>
+
+    <pre>
+        <div id="board">
+<span class="field" id="f11">o</span>-----------o-----------o
+|           |           |
+|  o--------o--------o  |
+|  |        |        |  |
+|  |  o-----o-----o  |  |
+|  |  |           |  |  |
+o--o--o           o--o--o
+|  |  |           |  |  |
+|  |  o-----o-----o  |  |
+|  |        |        |  |
+|  o--------o--------o  |
+|           |           |
+o-----------o-----------o
+</div>
+    </pre>
+    <script>
+    const fields = document.querySelectorAll('span.field');
+    fields.forEach(field => field.addEventListener('click', e => console.log(e.target)));
+
+    const data = [{
+        id: 'f11',
+        posX: 1,
+        posY: 1,
+        right: 'f41',
+        down: 'f14'
+    },
+    {
+        id: 'f41',
+        posX: 4,
+        posY: 1,
+        left: 'f11',
+        right: 'f71',
+        down: 'f42'
+    },
+    {
+        id: 'f71'
+    }
+    ];
+    </script>
+</body>
