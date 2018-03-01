@@ -150,5 +150,9 @@ const data = [{
 
 const game = {
     player: 'W',
-    phase: 'set'
+    phase: 'Set',
+    bPiecesLost: 0,
+    bPiecesSettable: 9,
+    wPiecesLost: 0,
+    wPiecesSettable: 9
 };

@@ -19,16 +19,34 @@ ${fields.f71}-----------${fields.f74}-----------${fields.f77}`;
     return board;
 }
 
-function setField(id, data, game) {
-    const fieldd = getFieldForId(id);
-    if (isSetAllowed(fieldd)) {
-        fieldd.state = game.player;
-        displayBoard(data, game);
-        if (game.player === whiteSymbol) {
-            game.player = blackSymbol;
-        } else {
-            game.player = whiteSymbol;
+function setField(field, to, data, game) {
+    field.state = to;
+}
+
+function handleClick(id, data, game) {
+    if (game.phase == "Set") {
+        const field = getFieldForId(id);
+
+        if (field.state == "o") {
+            setField(field, game.player, data, game);
+
+            if (game.player == 'B') {
+                game.bPiecesSettable--;
+
+                if (game.bPiecesSettable == 0) {
+                    game.phase = 'Moving'
+                }
+
+                game.player = whiteSymbol;
+            } else {
+                game.wPiecesSettable--;
+                game.player = blackSymbol;
+            }
+
+            displayBoard(data, game);
         }
+    } else {
+
     }
 }
 
@@ -37,9 +55,20 @@ function displayBoard(data, game) {
     document.getElementById('board').innerHTML = board;
     document.getElementById('eval').innerHTML = evaluate(data, game);
     document.getElementById('phase').innerHTML = game.phase;
+    document.getElementById('player').innerHTML = game.player;
+    document.getElementById('bsettable').innerHTML = game.bPiecesSettable;
+    document.getElementById('blost').innerHTML = game.bPiecesLost;
+    document.getElementById('wsettable').innerHTML = game.wPiecesSettable;
+    document.getElementById('wlost').innerHTML = game.wPiecesLost;
     
     const fields = document.querySelectorAll('span.field');
     fields.forEach(field => field.addEventListener('click', e => {
-        setField(e.target.id, data, game);
+        handleClick(e.target.id, data, game);
     }));
+}
+
+function getFieldForId(id) {
+    return data.filter(function(dataa) {
+        return dataa.id == id;
+    })[0];
 }
