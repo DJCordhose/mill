@@ -1,16 +1,15 @@
 <body>
-    <script src="data.js"></script>
-    <script src="display.js"></script>
 
     <pre>
         <div id="board">
         </div>
     </pre>
+    <script src="data.js"></script>
+    <script src="display.js"></script>
     <script>
         const board = createBoard(data);
         document.getElementById('board').innerHTML = board;
 
-        const fields = document.querySelectorAll('span.field');
-        fields.forEach(field => field.addEventListener('click', e => console.log(e.target)));
     </script>
+    <script src="interaction.js"></script>
 </body>
