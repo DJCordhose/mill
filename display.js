@@ -19,16 +19,12 @@ ${fields.f71}-----------${fields.f74}-----------${fields.f77}`;
     return board;
 }
 
-function setField(field, to, data, game) {
-    field.state = to;
-}
-
 function handleClick(id, data, game) {
     if (game.phase == "Set") {
-        const field = getFieldForId(id);
+        const field = getFieldForId(data, id);
 
         if (field.state == "o") {
-            setField(field, game.player, data, game);
+            setState(id, game.player);
 
             if (game.player == 'B') {
                 game.bPiecesSettable--;
@@ -43,10 +39,10 @@ function handleClick(id, data, game) {
                 game.player = blackSymbol;
             }
 
-            displayBoard(data, game);
+            displayBoard(getData(), game);
         }
     } else {
-        
+
     }
 }
 
@@ -67,7 +63,7 @@ function displayBoard(data, game) {
     }));
 }
 
-function getFieldForId(id) {
+function getFieldForId(data, id) {
     return data.filter(function(dataa) {
         return dataa.id == id;
     })[0];
