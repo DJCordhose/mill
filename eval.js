@@ -1,5 +1,5 @@
 // black pos, white neg
-function evaluate(compressedState, game) {
+function evaluate(compressedState) {
     let scoreWhite = 0;
     let scoreBlack = 0;
 
