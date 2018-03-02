@@ -1,38 +1,111 @@
 function isMoveValid(compressedState, game) {
-    const possibleNextStates = expandState(compressedState, game)    
+    const possibleNextStates = expandState(compressedState, game)
 }
 
-function expandState(compressedState, game) {
+function expandState(compressedState, phase, maxPlayer) {
     const nextStates = [];
-    if (game.phase === 'Set') {
-        const arr = [... compressedState];
+    if (phase === 'Set') {
+        const arr = [...compressedState];
         arr.forEach((state, idx) => {
             if (state === 'o') {
                 const nextArr = arr.slice();
-                nextArr[idx] = game.player;
+                nextArr[idx] = maxPlayer ? blackSymbol : whiteSymbol;
                 const newState = nextArr.join('');
                 nextStates.push(newState);
             }
         });
-        
-        
-    } else if (game.phase === 'Moving') {
+
+
+    } else if (phase === 'Moving') {
 
     }
+    // return [nextStates[0], nextStates[1]];
     return nextStates;
 }
 
-function computerMove(compressedState, game) {
-    const states = expandState(compressedState, game);
-    const evaluations = states.map(state => evaluate(state, game));
-    let max = - Number.MAX_VALUE;
-    let maxState = null;
-    evaluations.forEach((evaluation, idx) => {
-        if (evaluation > max) {
-            max = evaluation;
-            maxState = states[idx];
+// https://en.wikipedia.org/wiki/Minimax
+// https://en.wikipedia.org/wiki/Negamax
+// black pos, white neg
+// minimax(compressedState, 4, 'Set', true)
+function minimax(state, depth, phase, maxPlayer) {
+    if (depth === 0) {
+        return {
+            value: evaluate(state),
+            state: state
         }
-    });
-    game.player = whiteSymbol;
-    return maxState;
+    }
+    if (maxPlayer) {
+        let bestValue = - Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value > bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    } else {
+        let bestValue = Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value < bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    
+    }
+}
+
+// https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+function alphabeta(state, depth, phase, alpha = - Number.MAX_VALUE, beta = Number.MAX_VALUE, maxPlayer=true) {
+    if (depth === 0) {
+        return {
+            value: evaluate(state),
+            state: state
+        }
+    }
+    if (maxPlayer) {
+        let bestValue = - Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value > bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    } else {
+        let bestValue = Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value < bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    
+    }
 }

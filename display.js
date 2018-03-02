@@ -226,7 +226,7 @@ function displayBoard(data, game) {
     document.getElementById('wsettable').innerHTML = game.wPiecesSettable;
     document.getElementById('wlost').innerHTML = game.wPiecesLost;
 
-    const eval = evaluate(data, game)
+    const eval = evaluate(compressedState)
     document.getElementById('eval').innerHTML = (eval > 0 ? eval + " for <b>B</b>" : (eval < 0 ? eval*-1 + " for <b>W</b>" : "<b>Draw</b>"));
     
     const fields = document.querySelectorAll('span.field');
