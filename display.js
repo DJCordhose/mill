@@ -198,11 +198,6 @@ function detectMill(id, player, data, game) {
 function displayBoard(data, game) {
     const board = createBoard(data);
     document.getElementById('board').innerHTML = board;
-<<<<<<< HEAD
-=======
-    document.getElementById('eval').innerHTML = evaluate(compressedState, game);
-    document.getElementById('phase').innerHTML = game.phase;
->>>>>>> a64196baa1576b1c640bb18cab665fff2063be78
     document.getElementById('player').innerHTML = game.player;
     document.getElementById('phase').innerHTML = game.phase;
     document.getElementById('bsettable').innerHTML = game.bPiecesSettable;
