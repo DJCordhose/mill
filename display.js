@@ -26,7 +26,7 @@ function handleClick(id, data, game) {
         if (field.state == "o") {
             setState(id, game.player);
 
-            if (detectMill(id, game.player, data, game)) {
+            if (detectMill(id, game.player)) {
                 if (game.player == "B") {
                     game.bPiecesSettable--;
     
@@ -58,7 +58,7 @@ function handleClick(id, data, game) {
             displayBoard(getData(), game);
         }
     } else if (game.phase === "Set Mill") {
-        if (!detectMill(id, (game.player === "W" ? "B" : "W"), data, game) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player) {
+        if (!detectMill(id, (game.player === "W" ? "B" : "W")) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player) {
             setState(id, "o");
 
             if (game.player == "B") {
@@ -74,7 +74,7 @@ function handleClick(id, data, game) {
             displayBoard(getData(), game);
         }
     } else if (game.phase === "Moving Mill") {
-        if (!detectMill(id, (game.player === "W" ? "B" : "W"), data, game) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player) {
+        if (!detectMill(id, (game.player === "W" ? "B" : "W")) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player) {
             setState(id, "o");
 
             if (game.player == "B") {
@@ -87,8 +87,6 @@ function handleClick(id, data, game) {
 
             game.phase = "Moving";
 
-            displayBoard(getData(), game);
-            compressedState = computerMove(compressedState, game);
             displayBoard(getData(), game);
         }
     } else if (game.phase === "Moving") {
@@ -130,10 +128,25 @@ function handleClick(id, data, game) {
             }
 
             if (valid) {
-                game.phase = "Moving";
-                setState(id, game.player);
-                setState(game.movingSelect, "o");
-                game.player = (game.player === "W" ? "B" : "W");
+                if (detectMill(id, game.player,)) {
+                    if (game.player == "B") {
+                        game.bPiecesSettable--;
+        
+                        game.phase = "Moving Mill";
+                    } else {
+                        game.wPiecesSettable--;
+    
+                        game.phase = "Moving Mill";
+                    }
+
+                    setState(id, game.player);
+                    setState(game.movingSelect, "o");
+                } else {
+                    game.phase = "Moving";
+                    setState(id, game.player);
+                    setState(game.movingSelect, "o");
+                    game.player = (game.player === "W" ? "B" : "W");
+                }
 
                 displayBoard(getData(), game);
             }
@@ -144,7 +157,7 @@ function handleClick(id, data, game) {
     }
 }
 
-function detectMill(id, player, data, game) {
+function detectMill(id, player) {
     fieldData = getData();
     hMill = [fieldData[idx4Id(id)]];
     vMill = [fieldData[idx4Id(id)]];
