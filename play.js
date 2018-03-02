@@ -1,5 +1,5 @@
-function isMoveValid(state, game) {
-    const possibleNextStates = expandState(state, game)    
+function isMoveValid(compressedState, game) {
+    const possibleNextStates = expandState(compressedState, game)    
 }
 
 function expandState(compressedState, game) {
@@ -20,4 +20,19 @@ function expandState(compressedState, game) {
 
     }
     return nextStates;
+}
+
+function computerMove(compressedState, game) {
+    const states = expandState(compressedState, game);
+    const evaluations = states.map(state => evaluate(state, game));
+    let max = - Number.MAX_VALUE;
+    let maxState = null;
+    evaluations.forEach((evaluation, idx) => {
+        if (evaluation > max) {
+            max = evaluation;
+            maxState = states[idx];
+        }
+    });
+    game.player = whiteSymbol;
+    return maxState;
 }
