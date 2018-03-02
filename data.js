@@ -1,9 +1,24 @@
+const whiteSymbol = 'W';
+const blackSymbol = 'B';
+
+const phaseSet = 'Set';
+const phaseMoving = 'Moving';
+
 let compressedState = "oooooooooooooooooooooooo";
 const ids = ['f11', 'f14', 'f17', 'f22', 'f24', 'f26', 'f33', 'f34', 'f35', 'f41', 'f42', 'f43', 'f45', 'f46', 'f47', 'f53', 'f54', 'f55', 'f62', 'f64', 'f66', 'f71', 'f74', 'f77'];
+const values = [
+     2, 3, 2,
+     2, 4, 2,
+     2, 3, 2,
+     3, 4, 3, 3, 4, 3,
+     2, 3, 2,
+     2, 4, 2,
+     2, 3, 2,
+     ];
 
 const game = {
-    player: 'W',
-    phase: 'Set',
+    player: whiteSymbol,
+    phase: phaseSet,
     bPiecesLost: 0,
     bPiecesSettable: 9,
     wPiecesLost: 0,
