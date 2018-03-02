@@ -74,15 +74,27 @@ function handleClick(id, data, game) {
             displayBoard(getData(), game);
         }
     } else if (game.phase === "Moving Mill") {
-        if (!detectMill(id, (game.player === "W" ? "B" : "W")) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player) {
+        if ((!detectMill(id, (game.player === "W" ? "B" : "W")) & getData()[idx4Id(id)].state != "o" & getData()[idx4Id(id)].state != game.player)) {
             setState(id, "o");
 
             if (game.player == "B") {
                 game.wPiecesLost++;
                 game.player = whiteSymbol;
+
+                if (game.wPiecesLost == 7) {
+                    document.getElementById("winner").innerHTML = "Black";
+                    document.getElementById("game").style = "display: none;";
+                    document.getElementById("win").style = "display: block; text-align: center;";
+                }
             } else {
                 game.bPiecesLost++;
                 game.player = blackSymbol;
+
+                if (game.bPiecesLost == 7) {
+                    document.getElementById("winner").innerHTML = "White";
+                    document.getElementById("game").style = "display: none;";
+                    document.getElementById("win").style = "display: block; text-align: center;";
+                }
             }
 
             game.phase = "Moving";
@@ -108,44 +120,40 @@ function handleClick(id, data, game) {
             
             var valid = false;
 
-            if ((idY === mSY) & ((idY != 4 & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1) | (((idX <= 3 & mSX <= 3) | (idX >= 5 & mSX >= 5)) & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1))) valid = true;
+            if ((game.player == "B" ? game.bPiecesLost : game.wPiecesLost) >= 6) {
+                valid = true;
+            } else {
+                if ((idY === mSY) & ((idY != 4 & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1) | (((idX <= 3 & mSX <= 3) | (idX >= 5 & mSX >= 5)) & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1))) valid = true;
 
-            if (idX === mSX) {
-                hLine = [];
+                if (idX === mSX) {
+                    hLine = [];
 
-                getData().forEach(function(d) {
-                    dIdX = d.id.charAt(2);
-                    dIdY = d.id.charAt(1);
+                    getData().forEach(function(d) {
+                        dIdX = d.id.charAt(2);
+                        dIdY = d.id.charAt(1);
 
-                    if (mSX != "4" & dIdX === mSX) {
-                        hLine.push(d);
-                    } else if (((mSY <= 3 & dIdY <= 3) | (mSY >= 5 & dIdY >= 5)) & dIdX === mSX) {
-                        hLine.push(d);
-                    }
-                });
+                        if (mSX != "4" & dIdX === mSX) {
+                            hLine.push(d);
+                        } else if (((mSY <= 3 & dIdY <= 3) | (mSY >= 5 & dIdY >= 5)) & dIdX === mSX) {
+                            hLine.push(d);
+                        }
+                    });
 
-                if (Math.max(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) - (Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) == -1 ? 999 : Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect))) == 1) valid = true;
+                    if (Math.max(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) - (Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) == -1 ? 999 : Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect))) == 1) valid = true;
+                }
             }
 
             if (valid) {
-                if (detectMill(id, game.player,)) {
-                    if (game.player == "B") {
-                        game.bPiecesSettable--;
-        
-                        game.phase = "Moving Mill";
-                    } else {
-                        game.wPiecesSettable--;
-    
-                        game.phase = "Moving Mill";
-                    }
+                setState(id, game.player);
+                setState(game.movingSelect, "o");
 
-                    setState(id, game.player);
-                    setState(game.movingSelect, "o");
+                if (detectMill(id, game.player)) {
+                    game.phase = "Moving Mill";
                 } else {
                     game.phase = "Moving";
-                    setState(id, game.player);
-                    setState(game.movingSelect, "o");
                     game.player = (game.player === "W" ? "B" : "W");
+
+                    
                 }
 
                 displayBoard(getData(), game);
