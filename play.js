@@ -26,7 +26,50 @@ function expandState(compressedState, phase, maxPlayer) {
 // https://en.wikipedia.org/wiki/Minimax
 // https://en.wikipedia.org/wiki/Negamax
 // black pos, white neg
+// minimax(compressedState, 4, 'Set', true)
 function minimax(state, depth, phase, maxPlayer) {
+    if (depth === 0) {
+        return {
+            value: evaluate(state),
+            state: state
+        }
+    }
+    if (maxPlayer) {
+        let bestValue = - Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value > bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    } else {
+        let bestValue = Number.MAX_VALUE;
+        let bestState = null;
+        const children = expandState(state, phase, maxPlayer);
+        children.forEach(child => {
+            const value = minimax(child, depth - 1, phase, !maxPlayer).value;
+            if (value < bestValue) {
+                bestValue = value;
+                bestState = child;
+            }
+        });
+        return {
+            value: bestValue,
+            state: bestState
+        };
+    
+    }
+}
+
+// https://en.wikipedia.org/wiki/Alpha%E2%80%93beta_pruning
+function alphabeta(state, depth, phase, alpha = - Number.MAX_VALUE, beta = Number.MAX_VALUE, maxPlayer=true) {
     if (depth === 0) {
         return {
             value: evaluate(state),
