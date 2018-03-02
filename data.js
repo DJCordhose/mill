@@ -22,7 +22,8 @@ const game = {
     bPiecesLost: 0,
     bPiecesSettable: 9,
     wPiecesLost: 0,
-    wPiecesSettable: 9
+    wPiecesSettable: 9,
+    movingSelect: ""
 };
 
 function getData() {

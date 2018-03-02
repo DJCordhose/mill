@@ -89,6 +89,56 @@ function handleClick(id, data, game) {
 
             displayBoard(getData(), game);
         }
+    } else if (game.phase === "Moving") {
+        if (getData()[idx4Id(id)].state == game.player) {
+            game.movingSelect = id;
+
+            game.phase = "Moving Select";
+
+            displayBoard(getData(), game);
+
+            document.getElementById(id).style = "color: grey";
+        }
+    } else if (game.phase === "Moving Select") {
+        if (getData()[idx4Id(id)].state === "o") {
+            mSX = game.movingSelect.charAt(2);
+            mSY = game.movingSelect.charAt(1);
+            idX = id.charAt(2);
+            idY = id.charAt(1);
+            
+            var valid = false;
+
+            if ((idY === mSY) & ((idY != 4 & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1) | (((idX <= 3 & mSX <= 3) | (idX >= 5 & mSX >= 5)) & Math.abs(idx4Id(id) - idx4Id(game.movingSelect)) == 1))) valid = true;
+
+            if (idX === mSX) {
+                hLine = [];
+
+                getData().forEach(function(d) {
+                    dIdX = d.id.charAt(2);
+                    dIdY = d.id.charAt(1);
+
+                    if (mSX != "4" & dIdX === mSX) {
+                        hLine.push(d);
+                    } else if (((mSY <= 3 & dIdY <= 3) | (mSY >= 5 & dIdY >= 5)) & dIdX === mSX) {
+                        hLine.push(d);
+                    }
+                });
+
+                if (Math.max(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) - (Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect)) == -1 ? 999 : Math.min(hLine.map(function(e) { return e.id; }).indexOf(id), hLine.map(function(e) { return e.id; }).indexOf(game.movingSelect))) == 1) valid = true;
+            }
+
+            if (valid) {
+                game.phase = "Moving";
+                setState(id, game.player);
+                setState(game.movingSelect, "o");
+                game.player = (game.player === "W" ? "B" : "W");
+
+                displayBoard(getData(), game);
+            }
+        } else if (id === game.movingSelect) {
+            game.phase = "Moving";
+            displayBoard(getData(), game);
+        }
     }
 }
 
@@ -146,13 +196,15 @@ function detectMill(id, player, data, game) {
 function displayBoard(data, game) {
     const board = createBoard(data);
     document.getElementById('board').innerHTML = board;
-    document.getElementById('eval').innerHTML = evaluate(data, game);
-    document.getElementById('phase').innerHTML = game.phase;
     document.getElementById('player').innerHTML = game.player;
+    document.getElementById('phase').innerHTML = game.phase;
     document.getElementById('bsettable').innerHTML = game.bPiecesSettable;
     document.getElementById('blost').innerHTML = game.bPiecesLost;
     document.getElementById('wsettable').innerHTML = game.wPiecesSettable;
     document.getElementById('wlost').innerHTML = game.wPiecesLost;
+
+    const eval = evaluate(data, game)
+    document.getElementById('eval').innerHTML = (eval > 0 ? eval + " for <b>B</b>" : (eval < 0 ? eval*-1 + " for <b>W</b>" : "<b>Draw</b>"));
     
     const fields = document.querySelectorAll('span.field');
     fields.forEach(field => field.addEventListener('click', e => {
